@@ -20,7 +20,6 @@ const char *fragmentShaderSource = // "#version 330 core\n"
 
 
 
-int Block::instanceCount=0;
 Block::Block(const glm::mat4& projection,
 	     const float leftX,
 	     const float topY,
@@ -29,13 +28,6 @@ Block::Block(const glm::mat4& projection,
 	     const unsigned char r, const unsigned char g, const unsigned char b):
   m_projection(projection)
 {
-  myInstance = instanceCount++;
-  /*
-  std::cerr << "leftX: " << leftX << " "
-	    << "topY: " << topY << " "
-	    << "rightX: " << rightX << " "
-	    << "botY: " << botY << " " << std::endl;
-  */
   SetupShader();
 
   float vertices[] = {
@@ -46,14 +38,9 @@ Block::Block(const glm::mat4& projection,
   };
   
 
-  unsigned int indices[] = {  // note that we start from 0!
-			    3, 0, 2,  // first Triangle
-			    1   // second Triangle
+  unsigned int indices[] = { 3, 0, 2,  // first Triangle
+			     1   // second Triangle
   };
-    
-  glGenBuffers(1, &m_VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, m_VAO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   glGenBuffers(1, &m_VBO);
   glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -123,7 +110,7 @@ void Block::SetupShader()
     if (!success)
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     // fragment shader
     int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -134,7 +121,7 @@ void Block::SetupShader()
     if (!success)
     {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     // link shaders
     m_shaderProgram = glCreateProgram();
@@ -145,7 +132,7 @@ void Block::SetupShader()
     glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(m_shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 
     
@@ -172,8 +159,8 @@ void Block::SetupShader()
 
 Block::~Block()
 {
-  glDeleteVertexArrays(1, &m_VAO);
   glDeleteBuffers(1, &m_VBO);
+  glDeleteBuffers(1, &m_EBO);
   glDeleteProgram(m_shaderProgram);
 }
 

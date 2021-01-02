@@ -21,15 +21,12 @@ class Block
   
   const glm::mat4& m_projection;
   GLuint m_shaderProgram;
-  GLuint m_VAO;
+
   GLuint m_VBO;
   GLuint m_EBO;
 
   GLuint m_aPos;
   GLuint m_mvp;
-
-  static int instanceCount;
-  int myInstance;
   
 };
 
