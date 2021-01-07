@@ -3,6 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+
+
 const char *vertexShaderSource = // "#version 330 core\n"
   "attribute vec3 aPos;\n"
   "uniform mat4 mvp;\n"
@@ -25,38 +27,16 @@ Block::Block(const glm::mat4& projection,
 	     const float topY,
 	     const float rightX,
 	     const float botY,
-	     const unsigned char r, const unsigned char g, const unsigned char b):
-  m_projection(projection)
+	     const unsigned char r, const unsigned char g, const unsigned char b,
+	     const unsigned int row):
+  m_projection(projection),
+  m_leftX(leftX),
+  m_topY(topY),
+  m_rightX(rightX),
+  m_botY(botY),
+  m_row(row)
 {
   SetupShader();
-
-  float vertices[] = {
-		      rightX,  topY, 0.0f,  // top right
-		      rightX, botY, 0.0f,  // bottom right
-		      leftX, botY, 0.0f,  // bottom left
-		      leftX, topY, 0.0f   // top left 
-  };
-  
-
-  unsigned int indices[] = { 3, 0, 2,  // first Triangle
-			     1   // second Triangle
-  };
-
-  glGenBuffers(1, &m_VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-  glGenBuffers(1, &m_EBO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-  // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-  glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
- 
 }
 
 
@@ -75,9 +55,6 @@ void Block::Draw()
 			0                  // offset of first element
 			);
 
-
-
-  
   //pass the transform matrix into the shader
   glUniformMatrix4fv(m_mvp, 1, GL_FALSE, glm::value_ptr(m_projection));
   
@@ -164,3 +141,46 @@ Block::~Block()
   glDeleteProgram(m_shaderProgram);
 }
 
+
+//Check to see if the passed in 1 row is 1 after the last row in this block
+bool Block::IsExtension(const int row) const
+{
+  return ((row - 1) == m_row);
+}
+
+//Stretch the attributes down 1 row
+void Block::Extend()
+{
+  ++m_row;
+  --m_botY;
+}
+
+void Block::SetupGraphics()
+{
+  float vertices[] = {
+		      m_rightX,  m_topY, 0.0f,  // top right
+		      m_rightX, m_botY, 0.0f,  // bottom right
+		      m_leftX, m_botY, 0.0f,  // bottom left
+		      m_leftX, m_topY, 0.0f   // top left 
+  };
+  
+
+  unsigned int indices[] = { 3, 0, 2,  // first Triangle
+			     1   // second Triangle
+  };
+
+  glGenBuffers(1, &m_VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+  glGenBuffers(1, &m_EBO);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+  // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+  glBindBuffer(GL_ARRAY_BUFFER, 0); 
+  
+}

@@ -6,7 +6,7 @@ Room.cpp \
 Block.cpp \
 EventHandler.cpp \
 ShaderUtil.cpp \
-shader_utils.cpp \
+BlockMapKey.cpp \
 
 
 OBJECTS=$(SRCS:.cpp=.o)

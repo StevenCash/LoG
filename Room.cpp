@@ -6,6 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include "ShaderUtil.h"
 #include "Block.h"
+#include "BlockMapKey.h"
 
 Room::Room(const glm::mat4& projection, const std::string& mapFileName):
   m_projection(projection)
@@ -48,7 +49,7 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
   float xPositionStop = -96.0;
   float yPositionStart = 54.0;
   float yPositionStop = 53.0; //TBD this will eventually be counted down
-
+  int xStart=0;
   int pitch = map_image_surface->pitch;
   int pixelNum = 0;
   for(int j = 0; j < map_image_surface->h; ++j)
@@ -59,45 +60,72 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
       pixelRunCount = 0;
       xPositionStart = -96.0; //TBD remove magic numbers
       xPositionStop = -96.0;
-    
+      xStart = 0;
       for(int i = 0; i < pitch;)
 	{
 	  unsigned char b = pixels[offset + i++];
 	  unsigned char g = pixels[offset + i++];
 	  unsigned char r = pixels[offset + i++];
 	  ++pixelNum;
-
 	  //Check to see if it's still the same texture
 	  if(r!=rLast || pixelNum == map_image_surface->w) //we've reached the end.  create the block object that fits this count.
 	    {
-	      //	  std::cout << "Finished a run of " << pixelRunCount << " " << static_cast<unsigned int>(rLast) << " pixels" << std::endl;
-	      xPositionStop = xPositionStart + static_cast<double>(pixelRunCount);
-
+		  int xEnd = xStart + pixelRunCount;
+		  
+		  
+		  xPositionStop = xPositionStart + static_cast<double>(pixelRunCount);
 	      //Block creation
 	      if(rLast == 255) //Only create objects when the Red byte is 255
 		{
-		  Block * block = new Block(m_projection,
-					    xPositionStart,
-					    yPositionStart,
-					    xPositionStop,
-					    yPositionStop,
-					    r,g,b );
-		  
-		  m_blocks.push_back(block);
+		  //make sure the block isn't already in the map
+		  //		  BlockMapKey tempBlockMapKey(xPositionStart,xPositionStop,r,g,b);
+		  BlockMapKey tempBlockMapKey(xStart, xEnd,r,g,b);
 
+		  BlockMap::iterator iter = m_blockMap.find(tempBlockMapKey);
+		  
+		  if(iter == m_blockMap.end())
+		    {
+		      AddBlock(tempBlockMapKey,
+			       xPositionStart,
+			       yPositionStart,
+			       xPositionStop,
+			       yPositionStop,
+			       r,g,b,
+			       j);
+		    }
+		  else
+		    {
+		      //check to see if an existing block just needs to be stretched downward
+		      Block *pBlock = iter->second;
+		      if(pBlock->IsExtension(j))
+			{
+			  pBlock->Extend();
+			}
+		      else
+			{
+			  AddBlock(tempBlockMapKey,
+				   xPositionStart,
+				   yPositionStart,
+				   xPositionStop,
+				   yPositionStop,
+				   r,g,b,
+				   j);
+			}
+		    }
 		}
-	      //END GL Code
     
 	      //reset
 	      if(pixelNum == map_image_surface->w) //reset when we reach the end of the row
 		{
 		  xPositionStart = -96.0; // TBD - remove magic numbers
 		  xPositionStop = xPositionStart;
+		  xStart = 0;
 		  pixelNum = 0;
 		}
 	      else //reset at the end of the run
 		{
 		  xPositionStart = xPositionStop;
+		  xStart += pixelRunCount;
 		  rLast = r;
 		}
 	      pixelRunCount = 1;
@@ -114,14 +142,22 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
     }
   SDL_UnlockSurface(map_image_surface);    
   SDL_FreeSurface(map_image_surface);
+  std::cout << "Block Map size: " << m_blockMap.size() << std::endl;
+
+  BlockMap::iterator iter = m_blockMap.begin();
+  for(;iter != m_blockMap.end(); ++iter)
+    {
+      iter->second->SetupGraphics();
+    }
 
 }
 
 Room::~Room()
 {
-  for(int i = 0; i < m_blocks.size(); ++i)
+  BlockMap::const_iterator iter = m_blockMap.begin();
+  for(;iter != m_blockMap.end(); ++iter)
     {
-      delete m_blocks[i];
+      delete  iter->second;
     }
 }
 
@@ -129,8 +165,27 @@ Room::~Room()
 
 void Room::Draw()
 {
-  for(int i = 0; i < m_blocks.size(); ++i)
+  BlockMap::const_iterator iter = m_blockMap.begin();
+  for(;iter != m_blockMap.end(); ++iter)
     {
-      m_blocks[i]->Draw();
+      iter->second->Draw();
     }
+}
+
+void Room::AddBlock(const BlockMapKey& blockMapKey,
+		    const float leftX,
+		    const float topY,
+		    const float rightX,
+		    const float botY,
+		    const unsigned char r, const unsigned char g, const unsigned char b,
+		    const unsigned int row)
+{
+  Block * pBlock = new Block(m_projection,
+			     leftX,
+			     topY,
+			     rightX,
+			     botY,
+			     r,g,b,
+			     row);
+  m_blockMap[blockMapKey]= pBlock;
 }

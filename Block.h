@@ -13,13 +13,28 @@ class Block
 	const float topY,
 	const float rightX,
 	const float botY,
-	const unsigned char r,const unsigned char g, const unsigned char b);
+	const unsigned char r,const unsigned char g, const unsigned char b,
+	const unsigned int row);
+
+
+  bool IsExtension(const int row) const ;
+  void Extend();
   void Draw();
+  void SetupGraphics();
+
   ~Block();
- private:
+
+
+private:
   void SetupShader();
   
   const glm::mat4& m_projection;
+  float m_leftX;
+  float m_topY;
+  float m_rightX;
+  float m_botY;
+  unsigned int m_row;
+  
   GLuint m_shaderProgram;
 
   GLuint m_VBO;

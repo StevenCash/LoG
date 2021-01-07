@@ -7,9 +7,11 @@
 #include <glm/gtc/matrix_transform.hpp> //glm::mat4 and more
 #include <string>
 #include "GLHeader.h"
-#include <vector>
+#include <map>
 
+//TBD instantiate the block map(s) in the class that creates rooms and pass them in
 class Block;
+class BlockMapKey;
 
 //Class
 class Room
@@ -29,15 +31,18 @@ class Room
   //data members
   const glm::mat4& m_projection;
 
-  std::vector<Block*> m_blocks;
-  
-  //TBD move to tile/whatever class
-  GLuint m_locationMVP;
+  typedef std::map<BlockMapKey, Block*> BlockMap ;
+  BlockMap m_blockMap; 
 
 
-  GLuint m_VAO;
-  GLuint m_VBO;
-  
+  void AddBlock(const BlockMapKey& blockMapkey,
+		const float leftX,
+		const float topY,
+		const float rightX,
+		const float botY,
+		const unsigned char r, const unsigned char g, const unsigned char b,
+		const unsigned int row);
+
 };
 
 #endif //ROOM_H
