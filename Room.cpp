@@ -45,21 +45,14 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
   //get the red attribute of the first pixel in the row
   unsigned char rLast = pixels[2];
   int pixelRunCount = 0;
-  float xPositionStart = -96.0; //TBD remove magic numbers
-  float xPositionStop = -96.0;
-  float yPositionStart = 54.0;
-  float yPositionStop = 53.0; //TBD this will eventually be counted down
   int xStart=0;
   int pitch = map_image_surface->pitch;
   int pixelNum = 0;
   for(int j = 0; j < map_image_surface->h; ++j)
-
     {
       int offset = j * pitch; //offset into the byte array of pixels
       rLast = pixels[offset + 2]; //use the first red byte to start
       pixelRunCount = 0;
-      xPositionStart = -96.0; //TBD remove magic numbers
-      xPositionStop = -96.0;
       xStart = 0;
       for(int i = 0; i < pitch;)
 	{
@@ -70,10 +63,7 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 	  //Check to see if it's still the same texture
 	  if(r!=rLast || pixelNum == map_image_surface->w) //we've reached the end.  create the block object that fits this count.
 	    {
-		  int xEnd = xStart + pixelRunCount;
-		  
-		  
-		  xPositionStop = xPositionStart + static_cast<double>(pixelRunCount);
+	      int xEnd = xStart + pixelRunCount;
 	      //Block creation
 	      if(rLast == 255) //Only create objects when the Red byte is 255
 		{
@@ -86,12 +76,11 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 		  if(iter == m_blockMap.end())
 		    {
 		      AddBlock(tempBlockMapKey,
-			       xPositionStart,
-			       yPositionStart,
-			       xPositionStop,
-			       yPositionStop,
-			       r,g,b,
-			       j);
+			       xStart,
+			       j,
+			       xEnd,
+			       j+1,
+			       r,g,b);
 		    }
 		  else
 		    {
@@ -104,12 +93,11 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 		      else
 			{
 			  AddBlock(tempBlockMapKey,
-				   xPositionStart,
-				   yPositionStart,
-				   xPositionStop,
-				   yPositionStop,
-				   r,g,b,
-				   j);
+				   xStart,
+				   j,
+				   xEnd,
+				   j+1,
+				   r,g,b);
 			}
 		    }
 		}
@@ -117,14 +105,11 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 	      //reset
 	      if(pixelNum == map_image_surface->w) //reset when we reach the end of the row
 		{
-		  xPositionStart = -96.0; // TBD - remove magic numbers
-		  xPositionStop = xPositionStart;
 		  xStart = 0;
 		  pixelNum = 0;
 		}
 	      else //reset at the end of the run
 		{
-		  xPositionStart = xPositionStop;
 		  xStart += pixelRunCount;
 		  rLast = r;
 		}
@@ -137,8 +122,6 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 	    }
 
 	}
-      yPositionStop--;
-      yPositionStart--;
     }
   SDL_UnlockSurface(map_image_surface);    
   SDL_FreeSurface(map_image_surface);
@@ -173,19 +156,18 @@ void Room::Draw()
 }
 
 void Room::AddBlock(const BlockMapKey& blockMapKey,
-		    const float leftX,
-		    const float topY,
-		    const float rightX,
-		    const float botY,
-		    const unsigned char r, const unsigned char g, const unsigned char b,
-		    const unsigned int row)
+		    const int leftX,
+		    const int topY,
+		    const int rightX,
+		    const int botY,
+		    const unsigned char r, const unsigned char g, const unsigned char b)
 {
   Block * pBlock = new Block(m_projection,
 			     leftX,
 			     topY,
 			     rightX,
 			     botY,
-			     r,g,b,
-			     row);
+			     r,g,b);
+
   m_blockMap[blockMapKey]= pBlock;
 }

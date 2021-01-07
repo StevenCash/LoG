@@ -9,13 +9,11 @@ class Block
 {
  public:
   Block(const glm::mat4& projection,
-	const float leftX,
-	const float topY,
-	const float rightX,
-	const float botY,
-	const unsigned char r,const unsigned char g, const unsigned char b,
-	const unsigned int row);
-
+	const int leftX,
+	const int topY,
+	const int rightX,
+	const int botY,
+	const unsigned char r,const unsigned char g, const unsigned char b);
 
   bool IsExtension(const int row) const ;
   void Extend();
@@ -27,13 +25,13 @@ class Block
 
 private:
   void SetupShader();
+
+  int m_startX;
+  int m_stopX;
+  int m_startY;
+  int m_stopY;
   
   const glm::mat4& m_projection;
-  float m_leftX;
-  float m_topY;
-  float m_rightX;
-  float m_botY;
-  unsigned int m_row;
   
   GLuint m_shaderProgram;
 

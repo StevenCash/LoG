@@ -23,18 +23,16 @@ const char *fragmentShaderSource = // "#version 330 core\n"
 
 
 Block::Block(const glm::mat4& projection,
-	     const float leftX,
-	     const float topY,
-	     const float rightX,
-	     const float botY,
-	     const unsigned char r, const unsigned char g, const unsigned char b,
-	     const unsigned int row):
+	     const int leftX,
+	     const int topY,
+	     const int rightX,
+	     const int botY,
+	     const unsigned char r, const unsigned char g, const unsigned char b):
   m_projection(projection),
-  m_leftX(leftX),
-  m_topY(topY),
-  m_rightX(rightX),
-  m_botY(botY),
-  m_row(row)
+  m_startX(leftX),
+  m_startY(topY),
+  m_stopX(rightX),
+  m_stopY(botY)
 {
   SetupShader();
 }
@@ -145,23 +143,28 @@ Block::~Block()
 //Check to see if the passed in 1 row is 1 after the last row in this block
 bool Block::IsExtension(const int row) const
 {
-  return ((row - 1) == m_row);
+  return ((row) == m_stopY);
 }
 
 //Stretch the attributes down 1 row
 void Block::Extend()
 {
-  ++m_row;
-  --m_botY;
+  ++m_stopY;
 }
 
 void Block::SetupGraphics()
 {
+  
+  float leftX = -96.0 + static_cast<double>(m_startX);
+  float rightX = -96.0 + static_cast<double>(m_stopX);
+  float topY = 54.0 - static_cast<double>(m_startY);
+  float botY = 54.0 - static_cast<double>(m_stopY);
+
   float vertices[] = {
-		      m_rightX,  m_topY, 0.0f,  // top right
-		      m_rightX, m_botY, 0.0f,  // bottom right
-		      m_leftX, m_botY, 0.0f,  // bottom left
-		      m_leftX, m_topY, 0.0f   // top left 
+		      rightX, topY, 0.0f,  // top right
+		      rightX, botY, 0.0f,  // bottom right
+		      leftX, botY, 0.0f,  // bottom left
+		      leftX, topY, 0.0f   // top left 
   };
   
 

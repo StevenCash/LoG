@@ -36,13 +36,11 @@ class Room
 
 
   void AddBlock(const BlockMapKey& blockMapkey,
-		const float leftX,
-		const float topY,
-		const float rightX,
-		const float botY,
-		const unsigned char r, const unsigned char g, const unsigned char b,
-		const unsigned int row);
-
+		const int leftX,
+		const int topY,
+		const int rightX,
+		const int botY,
+		const unsigned char r, const unsigned char g, const unsigned char b);
 };
 
 #endif //ROOM_H
