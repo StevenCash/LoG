@@ -5,6 +5,8 @@
 #include <iostream>
 #include "EventHandler.h"
 
+//Box 2D
+#include <Box2D/Box2D.h>
 
 //function prototype
 //1920x1080 for full HD
@@ -14,6 +16,14 @@ void setupDisplay(SDL_Window *&pWindow, SDL_GLContext& context, int screenx=1024
 
 int main(int /*argc*/, char ** /*argv*/)
 {
+
+//World for use with Box2D with no gravity
+//positive 10.0 is up
+//negative 10.0 is down
+//positive is right,
+//negative is left
+    b2World World(b2Vec2(0.0f,0.0f));
+  
     //variables to handle the SDL display
     SDL_Window *pWindow = 0;
     SDL_GLContext glContext;
@@ -21,7 +31,7 @@ int main(int /*argc*/, char ** /*argv*/)
     setupDisplay(pWindow,glContext);
 
     //Instantiate main event handler/control loop object
-    EventHandler eventHandler(pWindow);
+    EventHandler eventHandler(pWindow,World);
 
     //Run the main loop
     eventHandler.EventLoop();

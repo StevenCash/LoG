@@ -7,6 +7,7 @@ Block.cpp \
 EventHandler.cpp \
 ShaderUtil.cpp \
 BlockMapKey.cpp \
+Ship.cpp \
 
 
 OBJECTS=$(SRCS:.cpp=.o)
@@ -28,6 +29,7 @@ LIBRARIES=\
 -lSDL2_image \
 -lglew32 \
 -lopengl32 \
+-lBox2d \
 
 #-mwindows \
 
