@@ -1,8 +1,7 @@
 #include "Block.h"
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
-
-
+#include <Box2D/Box2D.h>
 
 
 const char *vertexShaderSource = // "#version 330 core\n"
@@ -22,17 +21,20 @@ const char *fragmentShaderSource = // "#version 330 core\n"
 
 
 
-Block::Block(const glm::mat4& projection,
+Block::Block(b2World& physicsWorld,
+	     const glm::mat4& projection,
 	     const int leftX,
 	     const int topY,
 	     const int rightX,
 	     const int botY,
 	     const unsigned char r, const unsigned char g, const unsigned char b):
+  m_physicsWorld(physicsWorld),
   m_projection(projection),
   m_startX(leftX),
   m_startY(topY),
   m_stopX(rightX),
-  m_stopY(botY)
+  m_stopY(botY),
+  m_pBody(0)
 {
   SetupShader();
 }
@@ -186,4 +188,44 @@ void Block::SetupGraphics()
   // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0); 
   
+}
+
+
+void Block::SetupPhysicsInfo()
+{
+      //Set up the object for Box2D
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_staticBody;
+    //    bodyDef.position.Set(startX,startY); //trying to start at the center
+    m_pBody = m_physicsWorld.CreateBody(&bodyDef);
+    b2PolygonShape blockShape;
+
+    //define array of vertices for the shape
+    b2Vec2 boxVertices[4]; 
+
+    float leftX = -96.0 + static_cast<double>(m_startX);
+    float rightX = -96.0 + static_cast<double>(m_stopX);
+    float topY = 54.0 - static_cast<double>(m_startY);
+    float botY = 54.0 - static_cast<double>(m_stopY);
+
+    boxVertices[0].x = leftX;
+    boxVertices[0].y = topY;
+
+    boxVertices[1].x = rightX;
+    boxVertices[1].y = topY;
+
+    boxVertices[2].x = rightX;
+    boxVertices[2].y = botY;
+    
+    boxVertices[3].x = leftX;
+    boxVertices[3].y = botY;
+
+    blockShape.Set(boxVertices, 4);
+    
+    //Box only creates convex polygons for shapes,
+    //so 2 triangles to create the shape we want
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &blockShape;
+    m_pBody->CreateFixture(&fixtureDef);
+
 }

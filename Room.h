@@ -9,6 +9,8 @@
 #include "GLHeader.h"
 #include <map>
 
+class b2World;
+
 //TBD instantiate the block map(s) in the class that creates rooms and pass them in
 class Block;
 class BlockMapKey;
@@ -17,7 +19,9 @@ class BlockMapKey;
 class Room
 {
  public:
-  Room(const glm::mat4& projection, const std::string& mapFileName);
+  Room(b2World& physicsWorld,
+       const glm::mat4& projection,
+       const std::string& mapFileName);
 
   virtual ~Room();
 
@@ -29,6 +33,7 @@ class Room
 
  private:
   //data members
+  b2World& m_physicsWorld;
   const glm::mat4& m_projection;
 
   typedef std::map<BlockMapKey, Block*> BlockMap ;

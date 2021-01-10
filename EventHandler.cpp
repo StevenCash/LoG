@@ -22,9 +22,12 @@ void EventHandler::EventLoop()
 {
   //TBD - This should probably be either passed in or created dynamically
   //Rooms are 192x108 grid
-  Room room(glm::ortho(-96.0,95.0,-54.0,53.0),"grid.bmp");
+  Room room(m_physicsWorld,
+	    glm::ortho(-96.0,95.0,-54.0,53.0),
+	    "grid.bmp");
 
-  Ship myShip(m_physicsWorld,glm::ortho(-96.0,95.0,-54.0,53.0));
+  Ship myShip(m_physicsWorld,
+	      glm::ortho(-96.0,95.0,-54.0,53.0));
   unsigned int command = 0;
   bool bShipCommand = false;
   SDL_Event event;

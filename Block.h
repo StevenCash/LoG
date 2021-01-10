@@ -5,10 +5,14 @@
 #include <glm/gtc/matrix_transform.hpp> //glm::mat4 and more
 
 
+class b2World;
+class b2Body;
+
 class Block
 {
  public:
-  Block(const glm::mat4& projection,
+  Block(b2World& physicsWorld,
+	const glm::mat4& projection,
 	const int leftX,
 	const int topY,
 	const int rightX,
@@ -19,7 +23,7 @@ class Block
   void Extend();
   void Draw();
   void SetupGraphics();
-
+  void SetupPhysicsInfo();
   ~Block();
 
 
@@ -30,7 +34,8 @@ private:
   int m_stopX;
   int m_startY;
   int m_stopY;
-  
+
+  b2World& m_physicsWorld;
   const glm::mat4& m_projection;
   
   GLuint m_shaderProgram;
@@ -40,7 +45,8 @@ private:
 
   GLuint m_aPos;
   GLuint m_mvp;
-  
+
+  b2Body* m_pBody;
 };
 
 #endif

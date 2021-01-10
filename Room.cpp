@@ -8,7 +8,10 @@
 #include "Block.h"
 #include "BlockMapKey.h"
 
-Room::Room(const glm::mat4& projection, const std::string& mapFileName):
+Room::Room(b2World& physicsWorld,
+	   const glm::mat4& projection,
+	   const std::string& mapFileName):
+  m_physicsWorld(physicsWorld),
   m_projection(projection)
 {
  
@@ -68,7 +71,6 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
 	      if(rLast == 255) //Only create objects when the Red byte is 255
 		{
 		  //make sure the block isn't already in the map
-		  //		  BlockMapKey tempBlockMapKey(xPositionStart,xPositionStop,r,g,b);
 		  BlockMapKey tempBlockMapKey(xStart, xEnd,r,g,b);
 
 		  BlockMap::iterator iter = m_blockMap.find(tempBlockMapKey);
@@ -131,6 +133,7 @@ Room::Room(const glm::mat4& projection, const std::string& mapFileName):
   for(;iter != m_blockMap.end(); ++iter)
     {
       iter->second->SetupGraphics();
+      iter->second->SetupPhysicsInfo();
     }
 
 }
@@ -162,7 +165,8 @@ void Room::AddBlock(const BlockMapKey& blockMapKey,
 		    const int botY,
 		    const unsigned char r, const unsigned char g, const unsigned char b)
 {
-  Block * pBlock = new Block(m_projection,
+  Block * pBlock = new Block(m_physicsWorld,
+			     m_projection,
 			     leftX,
 			     topY,
 			     rightX,

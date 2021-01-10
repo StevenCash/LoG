@@ -104,7 +104,7 @@ Ship::Ship(b2World& world,const glm::mat4& projMat):
         {
             {{ boxShipVertices[0].x,boxShipVertices[0].y, 0.0f,1.0f}, //0
              {1.0, 1.0, 1.0, 1.0}},
-            {{-0.4f, -0.5f, 0.0f,1.0f}, //1  //overwrote this one in the array, so use it manually
+            {{-0.4f, -0.5f, 0.0f, 1.0f}, //1  //overwrote this one in the array, so use it manually
              {red, green, blue, 1.0}},
             {{boxShipVertices[2].x,boxShipVertices[2].y, 0.0f,1.0f}, //2
              {red, green, blue, 1.0}},
@@ -166,7 +166,6 @@ void Ship::Draw()
 
      //glm translation vector
      b2Vec2 position = m_pBody->GetWorldCenter();
-     
      //Angles in Radians
      float angleDeg = m_pBody->GetAngle();
 
