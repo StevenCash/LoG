@@ -17,14 +17,14 @@ class Block
 	const int topY,
 	const int rightX,
 	const int botY,
-	const unsigned char r,const unsigned char g, const unsigned char b);
+	const unsigned int blockIndex);
 
   bool IsExtension(const int row) const ;
   void Extend();
   void Draw();
   void SetupGraphics();
   void SetupPhysicsInfo();
-  ~Block();
+  virtual ~Block();
 
 
 private:
@@ -47,6 +47,8 @@ private:
   GLuint m_mvp;
 
   b2Body* m_pBody;
+
+  unsigned int m_index;
 };
 
 #endif

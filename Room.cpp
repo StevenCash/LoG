@@ -46,7 +46,7 @@ Room::Room(b2World& physicsWorld,
   unsigned char* pixels = static_cast<unsigned char*>(map_image_surface->pixels);
 
   //get the red attribute of the first pixel in the row
-  unsigned char rLast = pixels[2];
+  unsigned int lastIndex = (pixels[2] << 16) | (pixels[1] << 8) | (pixels[0]);
   int pixelRunCount = 0;
   int xStart=0;
   int pitch = map_image_surface->pitch;
@@ -54,7 +54,7 @@ Room::Room(b2World& physicsWorld,
   for(int j = 0; j < map_image_surface->h; ++j)
     {
       int offset = j * pitch; //offset into the byte array of pixels
-      rLast = pixels[offset + 2]; //use the first red byte to start
+      lastIndex = (pixels[offset+2] << 16) | (pixels[offset+1] << 8) | (pixels[offset+0]);
       pixelRunCount = 0;
       xStart = 0;
       for(int i = 0; i < pitch;)
@@ -63,45 +63,15 @@ Room::Room(b2World& physicsWorld,
 	  unsigned char g = pixels[offset + i++];
 	  unsigned char r = pixels[offset + i++];
 	  ++pixelNum;
+	  unsigned int blockIndex = (r << 16) | (g << 8) | (b);
 	  //Check to see if it's still the same texture
-	  if(r!=rLast || pixelNum == map_image_surface->w) //we've reached the end.  create the block object that fits this count.
+	  if(blockIndex!=lastIndex || pixelNum == map_image_surface->w) //we've reached the end.  create the block object that fits this count.
 	    {
 	      int xEnd = xStart + pixelRunCount;
 	      //Block creation
-	      if(rLast == 255) //Only create objects when the Red byte is 255
+	      if(lastIndex == 0x00FF0000) //Only create objects when the Red byte is 255 - TBD: Look up index to determine what to do
 		{
-		  //make sure the block isn't already in the map
-		  BlockMapKey tempBlockMapKey(xStart, xEnd,r,g,b);
-
-		  BlockMap::iterator iter = m_blockMap.find(tempBlockMapKey);
-		  
-		  if(iter == m_blockMap.end())
-		    {
-		      AddBlock(tempBlockMapKey,
-			       xStart,
-			       j,
-			       xEnd,
-			       j+1,
-			       r,g,b);
-		    }
-		  else
-		    {
-		      //check to see if an existing block just needs to be stretched downward
-		      Block *pBlock = iter->second;
-		      if(pBlock->IsExtension(j))
-			{
-			  pBlock->Extend();
-			}
-		      else
-			{
-			  AddBlock(tempBlockMapKey,
-				   xStart,
-				   j,
-				   xEnd,
-				   j+1,
-				   r,g,b);
-			}
-		    }
+		  HandleBlockCreation(xStart,xEnd,blockIndex,j);
 		}
     
 	      //reset
@@ -113,10 +83,10 @@ Room::Room(b2World& physicsWorld,
 	      else //reset at the end of the run
 		{
 		  xStart += pixelRunCount;
-		  rLast = r;
+		  lastIndex = blockIndex;
 		}
 	      pixelRunCount = 1;
-
+	      
 	    } // last in run or row
 	  else
 	    {
@@ -127,7 +97,6 @@ Room::Room(b2World& physicsWorld,
     }
   SDL_UnlockSurface(map_image_surface);    
   SDL_FreeSurface(map_image_surface);
-  std::cout << "Block Map size: " << m_blockMap.size() << std::endl;
 
   BlockMap::iterator iter = m_blockMap.begin();
   for(;iter != m_blockMap.end(); ++iter)
@@ -163,7 +132,7 @@ void Room::AddBlock(const BlockMapKey& blockMapKey,
 		    const int topY,
 		    const int rightX,
 		    const int botY,
-		    const unsigned char r, const unsigned char g, const unsigned char b)
+		    const unsigned int blockIndex)
 {
   Block * pBlock = new Block(m_physicsWorld,
 			     m_projection,
@@ -171,7 +140,49 @@ void Room::AddBlock(const BlockMapKey& blockMapKey,
 			     topY,
 			     rightX,
 			     botY,
-			     r,g,b);
+			     blockIndex);
 
   m_blockMap[blockMapKey]= pBlock;
 }
+
+void Room::HandleBlockCreation(int xStart,
+			       int xEnd,
+			       unsigned int blockIndex,
+			       const int j)
+{
+  {
+    //make sure the block isn't already in the map
+    BlockMapKey tempBlockMapKey(xStart, xEnd, blockIndex);
+    
+    BlockMap::iterator iter = m_blockMap.find(tempBlockMapKey);
+    
+    if(iter == m_blockMap.end())
+      {
+	AddBlock(tempBlockMapKey,
+		 xStart,
+		 j,
+		 xEnd,
+		 j+1,
+		 blockIndex);
+      }
+    else
+      {
+	//check to see if an existing block just needs to be stretched downward
+	Block *pBlock = iter->second;
+	if(pBlock->IsExtension(j))
+	  {
+	    pBlock->Extend();
+	  }
+	else
+	  {
+	    AddBlock(tempBlockMapKey,
+		     xStart,
+		     j,
+		     xEnd,
+		     j+1,
+		     blockIndex);
+	  }
+      }
+  }
+}
+

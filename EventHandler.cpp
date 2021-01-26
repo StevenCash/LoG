@@ -24,7 +24,7 @@ void EventHandler::EventLoop()
   //Rooms are 192x108 grid
   Room room(m_physicsWorld,
 	    glm::ortho(-96.0,95.0,-54.0,53.0),
-	    "grid.bmp");
+	    "grid2.bmp");
 
   Ship myShip(m_physicsWorld,
 	      glm::ortho(-96.0,95.0,-54.0,53.0));

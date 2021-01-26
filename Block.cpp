@@ -27,14 +27,15 @@ Block::Block(b2World& physicsWorld,
 	     const int topY,
 	     const int rightX,
 	     const int botY,
-	     const unsigned char r, const unsigned char g, const unsigned char b):
+	     const unsigned blockIndex):
   m_physicsWorld(physicsWorld),
   m_projection(projection),
   m_startX(leftX),
   m_startY(topY),
   m_stopX(rightX),
   m_stopY(botY),
-  m_pBody(0)
+  m_pBody(0),
+  m_index(blockIndex)
 {
   SetupShader();
 }
@@ -160,8 +161,8 @@ void Block::SetupGraphics()
   float leftX = -96.0 + static_cast<double>(m_startX);
   float rightX = -96.0 + static_cast<double>(m_stopX);
   float topY = 54.0 - static_cast<double>(m_startY);
-  float botY = 54.0 - static_cast<double>(m_stopY);
-
+  float botY = 54.0 - static_cast<double>(m_stopY);	    
+  
   float vertices[] = {
 		      rightX, topY, 0.0f,  // top right
 		      rightX, botY, 0.0f,  // bottom right

@@ -45,7 +45,13 @@ class Room
 		const int topY,
 		const int rightX,
 		const int botY,
-		const unsigned char r, const unsigned char g, const unsigned char b);
+		const unsigned int blockIndex);
+
+  void HandleBlockCreation(int xStart,
+			   int xEnd,
+			   unsigned int blockIndex,
+			   const int j);
+
 };
 
 #endif //ROOM_H

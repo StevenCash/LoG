@@ -4,6 +4,7 @@ SRCS=\
 main.cpp \
 Room.cpp \
 Block.cpp \
+Portal.cpp \
 EventHandler.cpp \
 ShaderUtil.cpp \
 BlockMapKey.cpp \
