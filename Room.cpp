@@ -69,11 +69,8 @@ Room::Room(b2World& physicsWorld,
 	    {
 	      int xEnd = xStart + pixelRunCount;
 	      //Block creation
-	      if(lastIndex == 0x00FF0000) //Only create objects when the Red byte is 255 - TBD: Look up index to determine what to do
-		{
-		  HandleBlockCreation(xStart,xEnd,blockIndex,j);
-		}
-    
+	      HandleBlockCreation(xStart,xEnd,lastIndex,j);
+   
 	      //reset
 	      if(pixelNum == map_image_surface->w) //reset when we reach the end of the row
 		{
@@ -150,6 +147,7 @@ void Room::HandleBlockCreation(int xStart,
 			       unsigned int blockIndex,
 			       const int j)
 {
+  if(blockIndex == 0x00FF0000) //Only create objects when the Red byte is 255 - TBD: Look up index to determine what to do
   {
     //make sure the block isn't already in the map
     BlockMapKey tempBlockMapKey(xStart, xEnd, blockIndex);
