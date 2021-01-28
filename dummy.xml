@@ -1,0 +1,18 @@
+<room>
+	<roomId>
+		1
+	</roomId>
+	<blockType>
+		0x00FF0000
+	</blockType>
+	<someFloat>
+		3.14159
+	</someFloat>
+	<someFloat>
+		12345.6789
+	</someFloat>
+	<roomId>
+		2
+	</roomId>
+</room>
+
