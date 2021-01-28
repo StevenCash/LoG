@@ -99,7 +99,7 @@ Room::Room(b2World& physicsWorld,
   for(;iter != m_blockMap.end(); ++iter)
     {
       iter->second->SetupGraphics();
-      iter->second->SetupPhysicsInfo();
+      iter->second->SetupPhysics();
     }
 
 }

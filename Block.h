@@ -1,6 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include "BlockInterface.h"
 #include "GLHeader.h"
 #include <glm/gtc/matrix_transform.hpp> //glm::mat4 and more
 
@@ -8,7 +9,7 @@
 class b2World;
 class b2Body;
 
-class Block
+class Block : public BlockInterface
 {
  public:
   Block(b2World& physicsWorld,
@@ -23,7 +24,7 @@ class Block
   void Extend();
   void Draw();
   void SetupGraphics();
-  void SetupPhysicsInfo();
+  void SetupPhysics();
   virtual ~Block();
 
 

@@ -192,7 +192,7 @@ void Block::SetupGraphics()
 }
 
 
-void Block::SetupPhysicsInfo()
+void Block::SetupPhysics()
 {
       //Set up the object for Box2D
     b2BodyDef bodyDef;
