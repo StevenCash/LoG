@@ -15,12 +15,15 @@ class b2World;
 class Block;
 class BlockMapKey;
 
+class Shaders;
+
 //Class
 class Room
 {
  public:
   Room(b2World& physicsWorld,
        const glm::mat4& projection,
+       const Shaders& shaders,
        const std::string& mapFileName);
 
   virtual ~Room();
@@ -40,6 +43,8 @@ class Room
   BlockMap m_blockMap; 
 
 
+  const Shaders& m_shaders;
+  
   void AddBlock(const BlockMapKey& blockMapkey,
 		const int leftX,
 		const int topY,

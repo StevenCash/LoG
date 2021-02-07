@@ -3,26 +3,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <Box2D/Box2D.h>
 
-
-const char *vertexShaderSource = // "#version 330 core\n"
-  "attribute vec3 aPos;\n"
-  "uniform mat4 mvp;\n"
-  "void main()\n"
-  "{\n"
-  "   gl_Position = mvp * vec4(aPos.x + mvp.x, aPos.y, aPos.z, 1.0);\n"
-  "}\0";
-
-const char *fragmentShaderSource = // "#version 330 core\n"
-  "out vec4 FragColor;\n"
-  "void main()\n"
-  "{\n"
-  "   gl_FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-  "}\n\0";
-
-
+#include "Shaders.h"
 
 Block::Block(b2World& physicsWorld,
 	     const glm::mat4& projection,
+	     const Shaders& shaders,
 	     const int leftX,
 	     const int topY,
 	     const int rightX,
@@ -30,6 +15,7 @@ Block::Block(b2World& physicsWorld,
 	     const unsigned blockIndex):
   m_physicsWorld(physicsWorld),
   m_projection(projection),
+  m_shaderProgram(shaders.getShader("basic")),
   m_startX(leftX),
   m_startY(topY),
   m_stopX(rightX),
@@ -38,6 +24,7 @@ Block::Block(b2World& physicsWorld,
   m_index(blockIndex)
 {
   SetupShader();
+ 
 }
 
 
@@ -73,49 +60,9 @@ void Block::Draw()
 
 void Block::SetupShader()
 {
-   /********************************************************/
-  //temp setup shader info
- // build and compile our shader program
-    // ------------------------------------
-    // vertex shader
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    m_shaderProgram = glCreateProgram();
-    glAttachShader(m_shaderProgram, vertexShader);
-    glAttachShader(m_shaderProgram, fragmentShader);
-    glLinkProgram(m_shaderProgram);
-    // check for linking errors
-    glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(m_shaderProgram, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-
-    
+  //TBD: Figure out how to make this more generic - can't know the attributes if the shader is somewhere else
+  
     //bind attributes/uniforms
-    
     m_aPos = glGetAttribLocation(m_shaderProgram, "aPos");
     if (m_aPos == -1) {
       std::cerr << "Could not find attribute " << "aPos" << std::endl;
@@ -129,9 +76,6 @@ void Block::SetupShader()
       return;
     }
     
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
 }
 
 
@@ -153,6 +97,12 @@ bool Block::IsExtension(const int row) const
 void Block::Extend()
 {
   ++m_stopY;
+}
+
+void Block::Finalize()
+{
+  SetupGraphics();
+  SetupPhysics();
 }
 
 void Block::SetupGraphics()

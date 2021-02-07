@@ -8,12 +8,14 @@
 
 class b2World;
 class b2Body;
+class Shaders;
 
 class Block : public BlockInterface
 {
  public:
   Block(b2World& physicsWorld,
 	const glm::mat4& projection,
+	const Shaders& shaders,
 	const int leftX,
 	const int topY,
 	const int rightX,
@@ -23,13 +25,14 @@ class Block : public BlockInterface
   bool IsExtension(const int row) const ;
   void Extend();
   void Draw();
-  void SetupGraphics();
-  void SetupPhysics();
+  void Finalize();
   virtual ~Block();
 
 
 private:
   void SetupShader();
+  void SetupGraphics();
+  void SetupPhysics();
 
   int m_startX;
   int m_stopX;

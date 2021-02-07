@@ -8,6 +8,7 @@ Portal.cpp \
 EventHandler.cpp \
 ShaderUtil.cpp \
 BlockMapKey.cpp \
+Shaders.cpp \
 Ship.cpp \
 
 
@@ -31,6 +32,8 @@ LIBRARIES=\
 -lglew32 \
 -lopengl32 \
 -lBox2d \
+-ltinyxml2\
+
 
 #-mwindows \
 

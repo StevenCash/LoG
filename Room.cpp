@@ -7,12 +7,15 @@
 #include "ShaderUtil.h"
 #include "Block.h"
 #include "BlockMapKey.h"
+#include "Shaders.h"
 
 Room::Room(b2World& physicsWorld,
 	   const glm::mat4& projection,
+	   const Shaders& shaders,
 	   const std::string& mapFileName):
   m_physicsWorld(physicsWorld),
-  m_projection(projection)
+  m_projection(projection),
+  m_shaders(shaders)
 {
  
   /********************************************************/
@@ -98,8 +101,7 @@ Room::Room(b2World& physicsWorld,
   BlockMap::iterator iter = m_blockMap.begin();
   for(;iter != m_blockMap.end(); ++iter)
     {
-      iter->second->SetupGraphics();
-      iter->second->SetupPhysics();
+      iter->second->Finalize();
     }
 
 }
@@ -133,6 +135,7 @@ void Room::AddBlock(const BlockMapKey& blockMapKey,
 {
   Block * pBlock = new Block(m_physicsWorld,
 			     m_projection,
+			     m_shaders,
 			     leftX,
 			     topY,
 			     rightX,

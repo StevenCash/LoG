@@ -8,6 +8,7 @@
 
 class b2World;
 class b2Body;
+class Shaders;
 
 class Portal : public Block
 {
@@ -15,12 +16,13 @@ class Portal : public Block
   const char *fragmentShaderSource;
  public:
   Portal(b2World& physicsWorld,
-	const glm::mat4& projection,
-	const int leftX,
-	const int topY,
-	const int rightX,
-	const int botY,
-	const unsigned blockIndex);
+	 const glm::mat4& projection,
+	 const Shaders& shaders,
+	 const int leftX,
+	 const int topY,
+	 const int rightX,
+	 const int botY,
+	 const unsigned blockIndex);
 
   /*
   bool IsExtension(const int row) const ;

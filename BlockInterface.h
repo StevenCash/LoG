@@ -8,8 +8,7 @@ class BlockInterface
   virtual bool IsExtension(const int row) const = 0;
   virtual void Extend() = 0;
   virtual void Draw() = 0;
-  virtual void SetupGraphics() = 0;
-  virtual void SetupPhysics() = 0;
+  virtual void Finalize() = 0;
   virtual ~BlockInterface(){};
 
 };
