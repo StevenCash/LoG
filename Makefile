@@ -10,6 +10,7 @@ ShaderUtil.cpp \
 BlockMapKey.cpp \
 Shaders.cpp \
 Ship.cpp \
+NodeData.cpp \
 
 
 OBJECTS=$(SRCS:.cpp=.o)
