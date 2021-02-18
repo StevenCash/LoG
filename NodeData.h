@@ -30,8 +30,9 @@ class NodeData
  public:
     NodeData();
     ~NodeData();
-
-    std::map<int,NodeInfo> m_NodeInfo;
+    bool getNodeData(unsigned int index, NodeInfo& nodeInfo);
+private:
+    std::map<unsigned int,NodeInfo> m_nodeInfoMap;
 };
 
 #endif

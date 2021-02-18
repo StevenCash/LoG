@@ -24,8 +24,7 @@ NodeData::NodeData()
 		  std::cerr << "Error getting root element" << std::endl;
 		  abort();
 	      }
-	  
-	  
+	  	  
 	  //Using a named child to get an element
 	  tinyxml2::XMLElement *pNode = pRoot->FirstChildElement("Node");
 	  while(pNode)
@@ -67,59 +66,30 @@ NodeData::NodeData()
 			  std::cout << "LinkTarget: " << nodeInfo.m_linkNodeId << std::endl;
 		      }
 
+		  m_nodeInfoMap[nodeId]=nodeInfo;
 		  pNode = pNode->NextSiblingElement("Node");
 	  
 	      }
       }
-#ifdef FOO		  
-		  else
-	    {
-	      //Translating the data from a named element into an integer
-	      int roomId = 0;
-	      pElement->QueryIntText(&roomId);
-	      std::cerr << "Found roomId: " << roomId << std::endl;
-	    }
-
-	  pElement = pRoot->FirstChildElement("someFloat");
-	  if(!pElement)
-	    {
-	      std::cerr << "Error getting someFloat" << std::endl;
-	    }
-	  else
-	    {
-	      //Translating the data from a named element into an float
-	      float someFloat = 0;
-	      pElement->QueryFloatText(&someFloat);
-	      std::cerr << "Found someFloat: " << someFloat << std::endl;
-
-	      //Or just getting the value as text.  Note that this must be a const char*
-	      const char *pChar = pElement->GetText();
-	      std::cout << "Text string of someFloat: " << pChar << std::endl;
-
-	      //Loop through the all the element (note unnamed child)
-	      pElement = pRoot->FirstChildElement();
-	      while(pElement != 0 )
-		{
-		  const char *pChar = pElement->GetText();
-		  std::cout << "Text string: " << pChar << std::endl;
-		  pElement = pElement->NextSiblingElement();
-		}
-
-	      //iterate through named elements
-	      pElement = pRoot->FirstChildElement("roomId");
-	      while(pElement != 0 )
-		{
-		  const char *pChar = pElement->GetText();
-		  std::cout << "RoomId string: " << pChar << std::endl;
-		  //and get the next named sibling
-		  pElement = pElement->NextSiblingElement("roomId");
-		}
-	    }
-	}
-    }
-#endif
 }
 
 NodeData::~NodeData()
 {
+}
+
+
+
+
+bool NodeData::getNodeData(unsigned int index, NodeInfo& nodeInfo)
+{
+    std::map<unsigned int,NodeInfo>::const_iterator iter = m_nodeInfoMap.find(index);
+    if(iter != m_nodeInfoMap.end())
+	{
+	    nodeInfo = iter->second;
+	    return true;
+	}
+    else
+	{
+	    return false;
+	}
 }
