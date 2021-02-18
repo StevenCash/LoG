@@ -4,31 +4,29 @@
 
 Shaders::Shaders()
 {
-
-  const char *vertexShaderSource = // "#version 330 core\n"
+ const char *vertexShaderSource =  // "#version 330 core\n"
     "attribute vec3 aPos;\n"
     "uniform mat4 mvp;\n"
     "void main()\n"
     "{\n"
-    "   gl_Position = mvp * vec4(aPos.x + mvp.x, aPos.y, aPos.z, 1.0);\n"
+   //    "   gl_Position = mvp * vec4(aPos.x + mvp.x, aPos.y, aPos.z, 1.0);\n"
+    "   gl_Position = mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"   
     "}\0";
   
-  const char *fragmentShaderSource = // "#version 330 core\n"
-    "out vec4 FragColor;\n"
+ const char *fragmentShaderSource =  // "#version 330 core\n"
     "void main()\n"
     "{\n"
-    "   gl_FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   gl_FragColor = vec4(1.0, 0.5, 0.2, 1.0);\n"
     "}\n\0";
   
-  
-     /********************************************************/
+ /********************************************************/
   //temp setup shader info
  // build and compile our shader program
     // ------------------------------------
     // vertex shader
     int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
+ glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+ glCompileShader(vertexShader);
     // check for shader compile errors
     int success;
     char infoLog[512];
@@ -38,10 +36,10 @@ Shaders::Shaders()
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    // fragment shader
+// fragment shader
     int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
+ glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+ glCompileShader(fragmentShader);
     // check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success)
@@ -49,7 +47,7 @@ Shaders::Shaders()
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    // link shaders
+// link shaders
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);

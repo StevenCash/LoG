@@ -17,7 +17,6 @@ Room::Room(b2World& physicsWorld,
   m_projection(projection),
   m_shaders(shaders)
 {
- 
   /********************************************************/
   
   //Using SDL_Image to load the bmp into a SDL_Surface

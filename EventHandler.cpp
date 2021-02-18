@@ -23,6 +23,7 @@ EventHandler::EventHandler(SDL_Window *pWindow, b2World& physicsWorld):
 void EventHandler::EventLoop()
 {
 
+#ifdef TINYXML
   //Example code for loading a dummy xml file
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError errorCode = doc.LoadFile("dummy.xml");
@@ -97,7 +98,9 @@ void EventHandler::EventLoop()
 	  
 	}
     }
-  
+#endif
+
+
 
   Shaders shaders;
   
@@ -106,7 +109,7 @@ void EventHandler::EventLoop()
   Room room(m_physicsWorld,
 	    glm::ortho(-96.0,95.0,-54.0,53.0),
 	    shaders,
-	    "grid2.bmp");
+	    "grid.bmp");
 
   Ship myShip(m_physicsWorld,
 	      glm::ortho(-96.0,95.0,-54.0,53.0));

@@ -42,6 +42,12 @@ Ship::Ship(b2World& world,const glm::mat4& projMat):
 
     boxShipVertices[2].x = 0.0f;
     boxShipVertices[2].y = 0.0f;
+
+    for(int i=0; i<3; ++i)
+	{
+	    boxShipVertices[i].x*=2.0;
+	    boxShipVertices[i].y*=2.0;
+	}
     
     shipShape.Set(boxShipVertices, 3);
     
@@ -49,7 +55,7 @@ Ship::Ship(b2World& world,const glm::mat4& projMat):
     //so 2 triangles to create the shape we want
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shipShape;
-    fixtureDef.density = 1.0f;
+    fixtureDef.density = 0.5f;
     fixtureDef.friction = 0.3f;
     fixtureDef.restitution = 0.5f;
     m_pBody->CreateFixture(&fixtureDef);
@@ -57,6 +63,10 @@ Ship::Ship(b2World& world,const glm::mat4& projMat):
     
     boxShipVertices[1].x = 0.4f;
     boxShipVertices[1].y = -0.5f;
+	    boxShipVertices[1].x*=2.0;
+	    boxShipVertices[1].y*=2.0;
+
+
     shipShape.Set(boxShipVertices, 3);
     m_pBody->CreateFixture(&fixtureDef);
 
@@ -104,7 +114,7 @@ Ship::Ship(b2World& world,const glm::mat4& projMat):
         {
             {{ boxShipVertices[0].x,boxShipVertices[0].y, 0.0f,1.0f}, //0
              {1.0, 1.0, 1.0, 1.0}},
-            {{-0.4f, -0.5f, 0.0f, 1.0f}, //1  //overwrote this one in the array, so use it manually
+            {{-0.8f, -1.0f, 0.0f, 1.0f}, //1  //overwrote this one in the array, so use it manually
              {red, green, blue, 1.0}},
             {{boxShipVertices[2].x,boxShipVertices[2].y, 0.0f,1.0f}, //2
              {red, green, blue, 1.0}},

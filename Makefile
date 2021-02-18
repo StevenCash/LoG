@@ -25,12 +25,16 @@ LIBDIR=\
 -L/usr/lib \
 
 LIBRARIES=\
--lmingw32 \
 -lSDL2main \
 -lSDL2 \
 -lSDL2_image \
--lglew32 \
--lopengl32 \
+-lGL \
+-lBox2D \
+-ltinyxml2 \
+
+
+#-lglew \
+-lopengl \
 -lBox2d \
 -ltinyxml2\
 
@@ -42,7 +46,7 @@ DEPDIR = .d
 $(shell mkdir -p $(DEPDIR) >/dev/null)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
 CPPFLAGS += $(INCLUDE)
-CPPFLAGS += -DWINDOWS
+#CPPFLAGS += -DWINDOWS
 COMPILE.cc = $(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 POSTCOMPILE = mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d
 

@@ -1,9 +1,10 @@
 #ifndef GLHEADER_H
 #define GLHEADER_H
 
-#ifdef WINDOWS
-#include <GL/glew.h>
-#elif RPI
+
+//#include <GL/glew.h>
+
 #include <SDL2/SDL_opengles2.h>
+
 #endif
-#endif
+

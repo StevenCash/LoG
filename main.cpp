@@ -17,11 +17,11 @@ void setupDisplay(SDL_Window *&pWindow, SDL_GLContext& context, int screenx=1024
 int main(int /*argc*/, char ** /*argv*/)
 {
 
-//World for use with Box2D with no gravity
-//positive 10.0 is up
-//negative 10.0 is down
-//positive is right,
-//negative is left
+    //World for use with Box2D with no gravity
+    //positive 10.0 is up
+    //negative 10.0 is down
+    //positive is right,
+    //negative is left
     b2World World(b2Vec2(0.0f,0.0f));
   
     //variables to handle the SDL display
@@ -63,17 +63,21 @@ void setupDisplay(SDL_Window*& pWindow, SDL_GLContext& context, int screenx, int
 
 
     
-#ifdef WINDOWS
     Uint32 FLAGS = SDL_WINDOW_OPENGL;
-    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION , 3 ) ;
-    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION , 0 ) ;
-#elif RPI
-    Uint32 FLAGS = SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN;
+    //    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION , 3 ) ;
+    //    SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION , 0 ) ;
+
     SDL_GL_SetAttribute ( SDL_GL_CONTEXT_EGL , 1 ) ;
     SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MAJOR_VERSION , 2 );
     SDL_GL_SetAttribute ( SDL_GL_CONTEXT_MINOR_VERSION , 0 ) ;
-#endif
 
+    
+    int majorVersion;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &majorVersion);
+    std::cout << "Major: " <<  majorVersion << std::endl;
+
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &majorVersion);
+    std::cout << "Minor: " <<  majorVersion << std::endl;
     SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER , 1 ) ;
     //    SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE , 24 ) ;
 
@@ -89,17 +93,17 @@ void setupDisplay(SDL_Window*& pWindow, SDL_GLContext& context, int screenx, int
     
     context = SDL_GL_CreateContext ( pWindow ) ;
     SDL_GL_SetSwapInterval ( 1 ) ;
-    
-#ifdef WINDOWS
+
+#ifdef GLEW
     glewExperimental = true;
     GLenum err = glewInit () ;
     if(err != GLEW_OK)
     {
-        std::cerr << "Error initializing GLEW" << std::endl;
+      std::cerr << "Error initializing GLEW: " << glewGetErrorString(err) << std::endl;
         return;
     }
-    std::cerr << glGetString(GL_VERSION) << std::endl;
 #endif
+    std::cerr << glGetString(GL_VERSION) << std::endl;
 
 
     glViewport(0,0,screenx,screeny);
