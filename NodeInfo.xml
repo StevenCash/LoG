@@ -1,0 +1,28 @@
+<GeneralData>
+  <Node>
+    <NodeId>1</NodeId>
+    <Color>
+      <Red>0</Red>
+      <Green>255</Green>
+      <Blue>0</Blue>
+    </Color>
+  </Node>
+  <Node>
+    <NodeId>2</NodeId>
+    <Color>
+      <Red>255</Red>
+      <Green>0</Green>
+      <Blue>0</Blue>
+    </Color>
+  </Node>
+  <Node>
+    <NodeId>3</NodeId>
+    <Color>
+      <Red>0</Red>
+      <Green></Green>
+      <Blue>255</Blue>
+    </Color>
+    <LinkTargetId>1</LinkTargetId>
+  </Node>
+</GeneralData>
+

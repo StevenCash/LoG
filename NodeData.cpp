@@ -30,10 +30,11 @@ NodeData::NodeData()
 	  tinyxml2::XMLElement *pNode = pRoot->FirstChildElement("Node");
 	  while(pNode)
 	      {
+		  NodeInfo nodeInfo;
+		  int nodeId = 0;
 		  tinyxml2::XMLElement *pNodeId = pNode->FirstChildElement("NodeId");
 		  if(pNodeId)
 		      {
-			  int nodeId = 0;
 			  pNodeId->QueryIntText(&nodeId);
 			  std::cout << "NodeId: " << nodeId << std::endl;
 		      }
@@ -43,25 +44,29 @@ NodeData::NodeData()
 			  tinyxml2::XMLElement *pRed = pColor->FirstChildElement("Red");
 			  if(pRed)
 			      {
-				  int red = 0;
-				  pRed->QueryIntText(&red);
-				  std::cout << "Red: " << red << std::endl;
+				  pRed->QueryUnsignedText(&nodeInfo.m_red);
+				  std::cout << "Red: " << nodeInfo.m_red << std::endl;
 			      }
 			  tinyxml2::XMLElement *pGreen = pColor->FirstChildElement("Green");
 			  if(pGreen)
 			      {
-				  int green = 0;
-				  pGreen->QueryIntText(&green);
-				  std::cout << "Green: " << green << std::endl;
+				  pGreen->QueryUnsignedText(&nodeInfo.m_green);
+				  std::cout << "Green: " << nodeInfo.m_green << std::endl;
 			      }
 			  tinyxml2::XMLElement *pBlue = pColor->FirstChildElement("Blue");
 			  if(pBlue)
 			      {
-				  int blue = 0;
-				  pBlue->QueryIntText(&blue);
-				  std::cout << "Blue: " << blue << std::endl;
+				  pBlue->QueryUnsignedText(&nodeInfo.m_blue);
+				  std::cout << "Blue: " << nodeInfo.m_blue << std::endl;
 			      }
 		      }
+		  tinyxml2::XMLElement *pLinkTargetId = pNode->FirstChildElement("LinkTargetId");
+		  if(pLinkTargetId)
+		      {
+			  pLinkTargetId->QueryUnsignedText(&nodeInfo.m_linkNodeId);
+			  std::cout << "LinkTarget: " << nodeInfo.m_linkNodeId << std::endl;
+		      }
+
 		  pNode = pNode->NextSiblingElement("Node");
 	  
 	      }

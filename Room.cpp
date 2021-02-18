@@ -49,7 +49,7 @@ Room::Room(b2World& physicsWorld,
   
   unsigned char* pixels = static_cast<unsigned char*>(map_image_surface->pixels);
 
-  //get the red attribute of the first pixel in the row
+  //Build an index
   unsigned int lastIndex = (pixels[2] << 16) | (pixels[1] << 8) | (pixels[0]);
   int pixelRunCount = 0;
   int xStart=0;
