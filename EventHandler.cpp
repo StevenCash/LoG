@@ -23,24 +23,26 @@ EventHandler::EventHandler(SDL_Window *pWindow, b2World& physicsWorld):
 void EventHandler::EventLoop()
 {
 
-#ifdef TINYXML
-  //Example code for loading a dummy xml file
-  tinyxml2::XMLDocument doc;
-  tinyxml2::XMLError errorCode = doc.LoadFile("dummy.xml");
-  if (errorCode != tinyxml2::XML_SUCCESS)
-    {
-      std::cerr << "Error loading XML file" << std::endl;
-    }
+
+    //Example code for loading a dummy xml file
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError errorCode = doc.LoadFile("dummy.xml");
+    if (errorCode != tinyxml2::XML_SUCCESS)
+	{
+	    std::cerr << "Error loading XML file" << std::endl;
+	}
+    //Note that the root element may not actually have any value of its own
+    //it could just be the root of the document
+    //use named children to get specific elements
+    tinyxml2::XMLNode *pRoot = doc.RootElement();
+    if(!pRoot)
+	{
+	    std::cerr << "Error getting root element" << std::endl;
+	}
+    
+#ifdef TINYXML  
   else
     {
-      //Note that the root element may not actually have any value of its own
-      //it could just be the root of the document
-      //use named children to get specific elements
-      tinyxml2::XMLNode *pRoot = doc.RootElement();
-      if(!pRoot)
-	{
-	  std::cerr << "Error getting root element" << std::endl;
-	}
       else
 	{
 	  //Using a named child to get an element
