@@ -30,7 +30,7 @@ class NodeData
  public:
     NodeData();
     ~NodeData();
-    bool getNodeData(unsigned int index, NodeInfo& nodeInfo);
+    bool getNodeData(unsigned int index, NodeInfo& nodeInfo) const;
 private:
     std::map<unsigned int,NodeInfo> m_nodeInfoMap;
 };

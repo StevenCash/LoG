@@ -14,9 +14,8 @@ class b2World;
 //TBD instantiate the block map(s) in the class that creates rooms and pass them in
 class Block;
 class BlockMapKey;
-
 class Shaders;
-
+class NodeData;
 
 //Class
 class Room
@@ -25,6 +24,7 @@ class Room
   Room(b2World& physicsWorld,
        const glm::mat4& projection,
        const Shaders& shaders,
+       const NodeData& nodeData,
        const std::string& mapFileName);
 
   virtual ~Room();
@@ -43,9 +43,9 @@ class Room
   typedef std::map<BlockMapKey, Block*> BlockMap ;
   BlockMap m_blockMap; 
 
+    const Shaders& m_shaders;
+    const NodeData& m_nodeData;
 
-  const Shaders& m_shaders;
-  
   void AddBlock(const BlockMapKey& blockMapkey,
 		const int leftX,
 		const int topY,

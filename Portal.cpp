@@ -3,10 +3,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <Box2D/Box2D.h>
 #include "Shaders.h"
+#include "NodeData.h"
 
 Portal::Portal(b2World& physicsWorld,
 	       const glm::mat4& projection,
 	       const Shaders& shaders,
+	       const NodeInfo& nodeInfo,
 	       const int leftX,
 	       const int topY,
 	       const int rightX,
@@ -15,6 +17,7 @@ Portal::Portal(b2World& physicsWorld,
   Block(physicsWorld,
 	projection,
 	shaders,
+	nodeInfo,
 	leftX,
 	topY,
 	rightX,

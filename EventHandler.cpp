@@ -17,24 +17,22 @@ EventHandler::EventHandler(SDL_Window *pWindow, b2World& physicsWorld):
     m_velocityIterations(6),
     m_positionIterations(2)
 {
-    NodeData foo;
+
 }
 
 //Main Event Loop
 void EventHandler::EventLoop()
 {
 
-
-
-
-
-  Shaders shaders;
+    NodeData nodeData;
+    Shaders shaders;
   
   //TBD - This should probably be either passed in or created dynamically
   //Rooms are 192x108 grid
   Room room(m_physicsWorld,
 	    glm::ortho(-96.0,95.0,-54.0,53.0),
 	    shaders,
+	    nodeData,
 	    "grid.bmp");
 
   Ship myShip(m_physicsWorld,

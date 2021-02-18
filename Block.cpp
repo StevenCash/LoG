@@ -4,10 +4,12 @@
 #include <Box2D/Box2D.h>
 
 #include "Shaders.h"
+#include "NodeData.h"
 
 Block::Block(b2World& physicsWorld,
 	     const glm::mat4& projection,
 	     const Shaders& shaders,
+	     const NodeInfo& nodeInfo,
 	     const int leftX,
 	     const int topY,
 	     const int rightX,
@@ -24,7 +26,6 @@ Block::Block(b2World& physicsWorld,
   m_index(blockIndex)
 {
   SetupShader();
- 
 }
 
 
@@ -173,8 +174,7 @@ void Block::SetupPhysics()
 
     blockShape.Set(boxVertices, 4);
     
-    //Box only creates convex polygons for shapes,
-    //so 2 triangles to create the shape we want
+
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &blockShape;
     m_pBody->CreateFixture(&fixtureDef);

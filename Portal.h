@@ -9,6 +9,7 @@
 class b2World;
 class b2Body;
 class Shaders;
+class NodeInfo;
 
 class Portal : public Block
 {
@@ -18,6 +19,7 @@ class Portal : public Block
   Portal(b2World& physicsWorld,
 	 const glm::mat4& projection,
 	 const Shaders& shaders,
+	 const NodeInfo& nodeInfo,
 	 const int leftX,
 	 const int topY,
 	 const int rightX,

@@ -80,7 +80,7 @@ NodeData::~NodeData()
 
 
 
-bool NodeData::getNodeData(unsigned int index, NodeInfo& nodeInfo)
+bool NodeData::getNodeData(unsigned int index, NodeInfo& nodeInfo) const
 {
     std::map<unsigned int,NodeInfo>::const_iterator iter = m_nodeInfoMap.find(index);
     if(iter != m_nodeInfoMap.end())

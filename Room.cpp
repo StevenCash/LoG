@@ -8,17 +8,18 @@
 #include "Block.h"
 #include "BlockMapKey.h"
 #include "Shaders.h"
-
+#include "NodeData.h"
 
 Room::Room(b2World& physicsWorld,
 	   const glm::mat4& projection,
 	   const Shaders& shaders,
+	   const NodeData& nodeData,
 	   const std::string& mapFileName):
-    
   m_physicsWorld(physicsWorld),
   m_projection(projection),
-  m_shaders(shaders)
-{
+  m_shaders(shaders),
+  m_nodeData(nodeData)
+  {
   /********************************************************/
   
   //Using SDL_Image to load the bmp into a SDL_Surface
@@ -134,9 +135,12 @@ void Room::AddBlock(const BlockMapKey& blockMapKey,
 		    const int botY,
 		    const unsigned int blockIndex)
 {
-  Block * pBlock = new Block(m_physicsWorld,
+    NodeInfo nodeInfo;
+    m_nodeData.getNodeData(blockIndex,nodeInfo);
+    Block * pBlock = new Block(m_physicsWorld,
 			     m_projection,
 			     m_shaders,
+			     nodeInfo,
 			     leftX,
 			     topY,
 			     rightX,
@@ -151,7 +155,11 @@ void Room::HandleBlockCreation(int xStart,
 			       unsigned int blockIndex,
 			       const int j)
 {
-  if(blockIndex == 0x00FF0000) //Only create objects when the Red byte is 255 - TBD: Look up index to determine what to do
+    //check to see if the ID is defined in the XML
+    NodeInfo nodeInfo;
+    bool nodeFound = m_nodeData.getNodeData(blockIndex,nodeInfo);
+    if(nodeFound)
+    //    if(blockIndex == 0x00FF0000) //Only create objects when the Red byte is 255 - TBD: Look up index to determine what to do
   {
     //make sure the block isn't already in the map
     BlockMapKey tempBlockMapKey(xStart, xEnd, blockIndex);
