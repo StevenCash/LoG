@@ -254,7 +254,7 @@ void Ship::DoCommands()
     if(m_bForceForward)
     {
         xf.p.SetZero();
-        b2Vec2 force = b2Mul(xf,b2Vec2(0.0f, 10.0f));
+        b2Vec2 force = b2Mul(xf,b2Vec2(0.0f, 15.0f));
         m_pBody->ApplyForceToCenter(force,true);
     }
 
