@@ -20,43 +20,43 @@ class NodeData;
 //Class
 class Room
 {
- public:
-  Room(b2World& physicsWorld,
-       const glm::mat4& projection,
-       const Shaders& shaders,
-       const NodeData& nodeData,
-       const std::string& mapFileName);
+public:
+    Room(b2World& physicsWorld,
+	 const glm::mat4& projection,
+	 const Shaders& shaders,
+	 const NodeData& nodeData,
+	 const std::string& mapFileName);
 
-  virtual ~Room();
+    virtual ~Room();
 
-  virtual void Draw();
- protected:
-  //Disabled operations
-  Room(const Room& room);
-  Room operator=(const Room& room);
+    virtual void Draw();
+protected:
+    //Disabled operations
+    Room(const Room& room);
+    Room operator=(const Room& room);
 
- private:
-  //data members
-  b2World& m_physicsWorld;
-  const glm::mat4& m_projection;
+private:
+    //data members
+    b2World& m_physicsWorld;
+    const glm::mat4& m_projection;
 
-  typedef std::map<BlockMapKey, Block*> BlockMap ;
-  BlockMap m_blockMap; 
+    typedef std::map<BlockMapKey, Block*> BlockMap ;
+    BlockMap m_blockMap; 
 
     const Shaders& m_shaders;
     const NodeData& m_nodeData;
 
-  void AddBlock(const BlockMapKey& blockMapkey,
-		const int leftX,
-		const int topY,
-		const int rightX,
-		const int botY,
-		const unsigned int blockIndex);
+    void AddBlock(const BlockMapKey& blockMapkey,
+		  const int leftX,
+		  const int topY,
+		  const int rightX,
+		  const int botY,
+		  const unsigned int blockIndex);
 
-  void HandleBlockCreation(int xStart,
-			   int xEnd,
-			   unsigned int blockIndex,
-			   const int j);
+    void HandleBlockCreation(int xStart,
+			     int xEnd,
+			     unsigned int blockIndex,
+			     const int j);
 
 };
 

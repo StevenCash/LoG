@@ -13,28 +13,28 @@ class NodeInfo;
 
 class Portal : public Block
 {
-  const char *vertexShaderSource;
-  const char *fragmentShaderSource;
- public:
-  Portal(b2World& physicsWorld,
-	 const glm::mat4& projection,
-	 const Shaders& shaders,
-	 const NodeInfo& nodeInfo,
-	 const int leftX,
-	 const int topY,
-	 const int rightX,
-	 const int botY,
-	 const unsigned blockIndex);
+    const char *vertexShaderSource;
+    const char *fragmentShaderSource;
+public:
+    Portal(b2World& physicsWorld,
+	   const glm::mat4& projection,
+	   const Shaders& shaders,
+	   const NodeInfo& nodeInfo,
+	   const int leftX,
+	   const int topY,
+	   const int rightX,
+	   const int botY,
+	   const unsigned blockIndex);
 
-  /*
-  bool IsExtension(const int row) const ;
-  void Extend();
-  void Draw();
-  void SetupGraphics();
-  void SetupPhysicsInfo();
-  */
+    /*
+      bool IsExtension(const int row) const ;
+      void Extend();
+      void Draw();
+      void SetupGraphics();
+      void SetupPhysicsInfo();
+    */
   
-  virtual ~Portal();
+    virtual ~Portal();
 
 
 private:
