@@ -9,6 +9,5 @@ GLM
 GLEW
 tinyxml2
 
-I'm building/running via MSYS2 64-bit
 
 
