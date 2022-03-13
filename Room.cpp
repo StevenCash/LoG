@@ -2,8 +2,8 @@
 
 #include "Room.h"
 #include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "ShaderUtil.h"
 #include "Block.h"
 #include "BlockMapKey.h"
@@ -23,7 +23,8 @@ Room::Room(b2World& physicsWorld,
     /********************************************************/
   
     //Using SDL_Image to load the bmp into a SDL_Surface
-    SDL_Surface* map_image_surface = IMG_Load(mapFileName.c_str());
+    //SDL_Surface* map_image_surface = IMG_Load(mapFileName.c_str());
+	SDL_Surface* map_image_surface = IMG_Load("grid.bmp");
     if (map_image_surface == NULL) {
 	std::cerr << "IMG_Load: " << SDL_GetError() << std::endl;
 	return;

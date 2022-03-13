@@ -1,6 +1,6 @@
 //SDL2
 #include "GLHeader.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <iostream>
 #include "EventHandler.h"
@@ -17,6 +17,7 @@ void setupDisplay(SDL_Window *&pWindow, SDL_GLContext& context, int screenx=1024
 int main(int /*argc*/, char ** /*argv*/)
 {
 
+ 
     //World for use with Box2D with no gravity
     //positive 10.0 is up
     //negative 10.0 is down

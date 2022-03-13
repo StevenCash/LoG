@@ -1,6 +1,6 @@
 #include "GLHeader.h"
+#include <SDL.h>
 #include "EventHandler.h"
-#include <SDL2/SDL.h>
 #include <iostream>
 #include <Box2D/Box2D.h>
 

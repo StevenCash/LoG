@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <SDL2/SDL_log.h>
+#include <SDL_log.h>
 
 #include "ShaderUtil.h"
 //****************************************************************
@@ -101,7 +101,8 @@ GLuint createShaderProgram(const ShaderList_T &shaderList)
         GLint infoLogLength;
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-        GLchar strInfoLog[infoLogLength + 1];
+        //GLchar strInfoLog[infoLogLength + 1];
+        GLchar* strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
         std::stringstream myError;
         myError 
